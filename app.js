@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var postList = [];
     // var postList = [
     //     {id: 11, title: "post1", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa", comment : ["kjsdjhsdhs", "ajjdakdjajdkakd"]},
     //     {id: 22, title: "post2", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa", comment: ["kjsdjhsdhs", "ajjdakdjajdkakd"]}
@@ -95,8 +96,9 @@ $(document).ready(function () {
 
     // Add comments
     $("#post_container").on("keypress", ".comment-field", function(e) {
+        var id = parseInt(this.id)
         if(e.which == 13) {
-            $(".comments-list").append(commentTemplate(this.value))
+            $("#comment_list"+id).append(commentTemplate(this.value))
             this.value = ''
         }
     })
@@ -140,7 +142,7 @@ $(document).ready(function () {
                     <div class="comments-container">
                         <h4>Comments</h4>
                         <input class="comment-field" id=`+ post.id +` type="text" placeholder="Add comment">
-                        <div class="comments-list"></div>
+                        <div class="comments-list" id=comment_list`+ post.id +`></div>
                     </div>
                     </div>
                 </div>
@@ -163,11 +165,7 @@ $(document).ready(function () {
                     <p class="card-text">`+ data.description +`</p>
                     <div class="comments-container">
                         <h4>Comments</h4>
-                        <div class="comments-list">
-                            <div class="comment trash-comments">
-                                <p>lknkjajknakfnajkhfioajdl</p>
-                            </div>
-                        </div>
+                        <div class="comments-list"></div>
                     </div>
                     </div>
                 </div>
