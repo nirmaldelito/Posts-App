@@ -79,6 +79,12 @@ body {
     background-color: #f5f8fa;
     border-radius: 8px;
     margin: 16px 0 8px;
+    display: flex;
+    justify-content: space-between;
+}
+.comments-container .comment img {
+    width: 16px;
+    cursor: pointer;
 }
 .comments-container .comment p {
     margin: 0;
