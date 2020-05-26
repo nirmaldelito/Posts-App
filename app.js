@@ -1,29 +1,44 @@
 $(document).ready(function () {
-    var postList = [];
-    // var postList = [
-    //     {id: 11, title: "post1", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa", comment : ["kjsdjhsdhs", "ajjdakdjajdkakd"]},
-    //     {id: 22, title: "post2", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa", comment: ["kjsdjhsdhs", "ajjdakdjajdkakd"]}
-    // ];
+    // var postList = [];
+    var postList = [
+        {id: 11, title: "post1", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" },
+        {id: 22, title: "post2", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" }
+    ];
+
+    var commentsList = [
+        {id: 11, comment: "once uppn a time"},
+        {id: 11, comment: "onpn a time"},
+        {id: 22, comment: "dace uppn a time"},
+        {id: 22, comment: "tatatatpn a time"}
+    ];
 
     var id = 0;
 
-    // Blueprint for post obj
-    function Post(id, title, description, comments) {
+    // Constructor for post obj
+    function Post(id, title, description) {
         this.id = id
         this.title = title,
-        this.description = description,
-        this.comments = comments
+        this.description = description
+    }
+
+    // Constructor for commets
+    function Comments(id, comment) {
+        this.id = id,
+        this.comment = comment
     }
 
     // Show posts on load
-    // const showPosts = () => {
-    //     for(var i=0; i < postList.length; i++) {
-    //         $("#post_container").append(postCardTemplate(postList[i]))
-    //     }
-    // }
+    const showPosts = () => {
+        for(var i=0; i < postList.length; i++) {
+            $("#post_container").append(postCardTemplate(postList[i]))
+        }
+        for (var i=0; i < commentsList.length; i ++) {
+            $("#comment_list"+commentsList[i].id).append(commentTemplate(commentsList[i].comment))
+        }
+    }
 
     // Execute posts
-    // showPosts()
+    showPosts()
 
     // Function to create new post
     $("#create_post").on("click", function() {
@@ -34,7 +49,7 @@ $(document).ready(function () {
         } else {
             id++;
             var comments = [];
-            postList.push(new Post(id, title, description, comments))
+            postList.push(new Post(id, title, description))
             var data = {
                 id: id,
                 title: title,
