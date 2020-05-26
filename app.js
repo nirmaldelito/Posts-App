@@ -1,31 +1,32 @@
 $(document).ready(function () {
     // var postList = [];
     // var commentsList = [];
+    var trashedComments = [];
+    var id = 0;
+    var commentId = 0;
+
+    // Static data
     var postList = [
-        {id: 11, title: "post1", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" },
-        {id: 22, title: "post2", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" }
+        {id: 0, title: "post1", description: "Example description" }
     ];
 
     var commentsList = [
-        {id: 11, comment: "once uppn a time"},
-        {id: 11, comment: "onpn a time"},
-        {id: 22, comment: "dace uppn a time"},
-        {id: 22, comment: "tatatatpn a time"}
+        {id: 0, comment: "comment one", commentId: 12},
+        {id: 0, comment: "comment two", commentId: 13},
     ];
-
-    var id = 0;
 
     // Constructor for post obj
     function Post(id, title, description) {
-        this.id = id
-        this.title = title,
-        this.description = description
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 
     // Constructor for commets
-    function Comments(id, comment) {
-        this.id = id,
-        this.comment = comment
+    function Comments(id, comment, commentId) {
+        this.id = id;
+        this.comment = comment;
+        this.commentId = commentId;
     }
 
     // Show posts on load
@@ -34,7 +35,7 @@ $(document).ready(function () {
             $("#post_container").append(postTemplate(postList[i]))
         }
         for (var i=0; i < commentsList.length; i ++) {
-            $("#comment_list"+commentsList[i].id).append(commentTemplate(commentsList[i].comment))
+            $("#comment_list"+commentsList[i].id).append(commentTemplate(commentsList[i]))
         }
     }
 
@@ -71,13 +72,31 @@ $(document).ready(function () {
     // Destroy post
     $("#post_container").on("click",".destroy-post", function() {
         var id = parseInt(this.id);
-        var postElement = $("#post"+id)
+        var postElement = $("#post"+id);
         for(var i=0; i < postList.length; i++) {
             if(id === postList[i].id) {
                 $("#trash_container").append(trashPostTemplate(postList[i]))
             }
         }
+        for(var j=0; j < commentsList.length; j++) {
+            if (id === commentsList[j].id) {
+                $("#trashed_comments"+id).append(commentTemp(commentsList[j]))
+            }
+        }
         postElement.remove()
+    })
+
+    // Destroy comment
+    $("#post_container").on("click", ".destroy-comment", function() {
+        var id = parseInt(this.id);
+        for(var i=0; i < commentsList.length; i++) {
+            if (id === commentsList[i].commentId) {
+                $("#trash_container").append(trashCommentTemplate(commentsList[i]))
+                $("#comment"+commentsList[i].commentId).remove()
+                trashedComments.push(commentsList[i])
+                commentsList.splice(i, 1)
+            }
+        }
     })
 
     // Edit post
@@ -86,10 +105,14 @@ $(document).ready(function () {
         console.log(id)
         var newTitle = $("#titlefield"+id).val()
         var newDescritption = $("#descriptionfield"+id).val()
-        console.log(newDescritption)
-        $("#title"+id).html(newTitle)
-        $("#description"+id).html(newDescritption)
-        $("#edit"+id).modal("hide")
+        if (newTitle === '') {
+            $(".err-msg").css("display", "block")
+        } else {
+            $("#title"+id).html(newTitle)
+            $("#description"+id).html(newDescritption)
+            $("#edit"+id).modal("hide")
+            $(".err-msg").css("display", "none")
+        }
     })
 
     // Permanent delete
@@ -104,8 +127,14 @@ $(document).ready(function () {
     })
 
     // Hard delete comment
-    $("#post_container").on("click", ".comment", function() {
-        this.remove()
+    $("#post_container").on("click", ".delete-icon", function() {
+        var id = parseInt(this.id);
+        $("#comment"+id).remove();
+        for(var i = 0; i < commentsList.length; i++) {
+            if (id === commentsList[i].id) {
+                commentsList.splice(i, 1)
+            }
+        }
     })
 
     // Restore posts
@@ -117,14 +146,39 @@ $(document).ready(function () {
                 $("#post_container").append(postTemplate(postList[i]))
             }
         }
+        for(var j=0; j < commentsList.length; j++) {
+            if (id === commentsList[j].id) {
+                $("#comment_list"+id).append(commentTemplate(commentsList[j]))
+            }
+        }
+    })
+
+    // Restore comments
+    $("#trash_container").on("click", ".restore-comment", function() {
+        var id = parseInt(this.id);
+        console.log(id)
+        $("#trash_comment"+id).remove();
+        for(var i = 0; i < trashedComments.length; i ++) {
+            if (id === trashedComments[i].commentId) {
+                commentsList.push(trashedComments[i])
+                $("#comment_list"+trashedComments[i].id).append(commentTemplate(trashedComments[i]))
+                trashedComments.splice(i, 1)
+            }
+        }
+
     })
 
     // Add comments
     $("#post_container").on("keypress", ".comment-field", function(e) {
         var id = parseInt(this.id)
         if(e.which == 13) {
-            commentsList.push(new Comments(id, this.value))
-            $("#comment_list"+id).append(commentTemplate(this.value))
+            commentId++
+            commentsList.push(new Comments(id, this.value, commentId))
+            var data = {
+                comment: this.value,
+                commentId: commentId
+            }
+            $("#comment_list"+id).append(commentTemplate(data))
             this.value = '';
         }
     })
@@ -153,12 +207,13 @@ $(document).ready(function () {
                                     </button>
                                 </div>
                                 <div class="modal-body">
+                                    <p class="err-msg">Please enter a title</p>
                                     <input id="titlefield`+ post.id +`" type="text" placeholder="Title" value="`+ post.title +`">
                                     <input id="descriptionfield`+ post.id +`" type="text" placeholder="Title" value="`+ post.description +`">
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary edit-post" id=`+ id +`>Save</button>
+                                    <button type="button" class="btn btn-primary edit-post" id=`+ post.id +`>Save</button>
                                 </div>
                                 </div>
                             </div>
@@ -176,7 +231,7 @@ $(document).ready(function () {
         `
     }
 
-    // Template for trash posts
+    // Template for posts in trash
     function trashPostTemplate(data) {
         return `
             <div class="col-8" id=trash`+ data.id +`>
@@ -191,7 +246,7 @@ $(document).ready(function () {
                     <p class="card-text">`+ data.description +`</p>
                     <div class="comments-container">
                         <h4>Comments</h4>
-                        <div class="comments-list"></div>
+                        <div class="trash-comments-list" id=trashed_comments`+ data.id +`></div>
                     </div>
                     </div>
                 </div>
@@ -202,9 +257,35 @@ $(document).ready(function () {
     // Template for comments
     function commentTemplate(data) {
         return `
-            <div class="comment">
-                <p>`+ data +`</p>
-                <img src="icons/delete.svg">
+            <div class="comment" id=comment`+ data.commentId +`>
+                <p>`+ data.comment +`</p>
+                <div class="comment-actions">
+                    <button class="destroy-comment" id=`+ data.commentId +`>Destroy</button>
+                    <img class="delete-icon" id=`+ data.commentId +` src="icons/delete.svg">
+                </div>
+            </div>
+        `
+    }
+
+    // Template for post's comment in trash
+    function commentTemp(data) {
+        return `
+            <div class="comment" id=comment`+ data.commentId +`>
+                <p>`+ data.comment +`</p>
+            </div>
+        `
+    }
+
+    // Template for individual comments in trash
+    function trashCommentTemplate(data) {
+        return `
+            <div class="col-8" id=trash_comment`+ data.commentId +`>
+                <div class="trash-comment">
+                    <p>`+ data.comment +`</p>
+                    <div class="comment-actions">
+                        <button class="restore-comment" id=`+ data.commentId +`>restore</button>
+                    </div>
+                </div>
             </div>
         `
     }
