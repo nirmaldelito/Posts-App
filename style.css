@@ -22,6 +22,7 @@ body {
 }
 .card-container {
     width: 100% !important;
+    box-shadow: 0 1px 4px 0 #d2d9e5;
     margin: 24px 0 0;
 }
 .card-container .header-card {
@@ -54,7 +55,7 @@ body {
 }
 .create-post-container {
     text-align: center;
-    margin-top: 24px;
+    margin: 24px 0 0;
 }
 .create-post-container .create-post-button {
     border: 0;
@@ -64,11 +65,15 @@ body {
     background-color: #1da1f2;
     color: white;
 }
+#post_container {
+    padding: 0 0 24px;
+}
 .comments-container input {
     width: 100%;
     border: 1px solid rgb(29, 161, 242);
     padding: 8px 14px;
     border-radius: 8px;
+    margin-bottom: 16px;
 }
 .comments-container h4 {
     color: rgb(101, 119, 134);
@@ -78,7 +83,7 @@ body {
     padding: 16px;
     background-color: #f5f8fa;
     border-radius: 8px;
-    margin: 16px 0 8px;
+    margin: 0 0 8px;
     display: flex;
     justify-content: space-between;
 }
