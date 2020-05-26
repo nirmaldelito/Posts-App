@@ -23,7 +23,7 @@ body {
 .card-container {
     width: 100% !important;
     box-shadow: 0 1px 4px 0 #d2d9e5;
-    margin: 24px 0 0;
+    margin: 0 0 16px;
 }
 .card-container .header-card {
     display: flex;
@@ -54,8 +54,8 @@ body {
     background-color: rgb(224, 55, 44);
 }
 .create-post-container {
-    text-align: center;
-    margin: 24px 0 0;
+    text-align: right;
+    margin: 24px 0 ;
 }
 .create-post-container .create-post-button {
     border: 0;
@@ -94,6 +94,18 @@ body {
 .comments-container .comment p {
     margin: 0;
 }
+.comments-container .comment .comment-actions button {
+    border: 0px;
+    padding: 4px 14px;
+    border-radius: 24px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-right: 2px;
+    font-size: 10px;
+    background-color: #1da1f2;
+    cursor: pointer;
+}
+
 .nav-link {
     font-weight: bold;
     color: #1da1f2;
@@ -102,6 +114,13 @@ body {
     background-color: #1da1f2
 }
 .error-msg {
+    margin-bottom: 4px;
+    text-align: left;
+    font-size: 14px;
+    color: red;
+    display: none;
+}
+.err-msg {
     margin-bottom: 4px;
     text-align: left;
     font-size: 14px;
@@ -122,7 +141,26 @@ body {
 }
 
 /* Trash element styles */
-.trash-comments {
+.trash-comment {
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
+    padding: 8px 16px;
+    border-radius: .25rem;
+    box-shadow: 0 1px 4px 0 #d2d9e5;
+    margin-bottom: 16px;
+}
+.trash-comment p {
+    margin: 0;
+}
+.trash-comment button {
+    border: 0px;
+    padding: 4px 14px;
+    border-radius: 24px;
+    color: #ffffff;
+    font-weight: bold;
+    margin-right: 2px;
+    font-size: 10px;
+    background-color: #1da1f2;
+    cursor: pointer;
 }
