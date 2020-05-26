@@ -1,5 +1,6 @@
 $(document).ready(function () {
     // var postList = [];
+    // var commentsList = [];
     var postList = [
         {id: 11, title: "post1", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" },
         {id: 22, title: "post2", description: "bjfhkjsdnfkjdsjkgnjsbgjsajgbajbjdsa" }
@@ -30,7 +31,7 @@ $(document).ready(function () {
     // Show posts on load
     const showPosts = () => {
         for(var i=0; i < postList.length; i++) {
-            $("#post_container").append(postCardTemplate(postList[i]))
+            $("#post_container").append(postTemplate(postList[i]))
         }
         for (var i=0; i < commentsList.length; i ++) {
             $("#comment_list"+commentsList[i].id).append(commentTemplate(commentsList[i].comment))
@@ -48,14 +49,13 @@ $(document).ready(function () {
             $(".error-msg").css("display", "block")
         } else {
             id++;
-            var comments = [];
             postList.push(new Post(id, title, description))
             var data = {
                 id: id,
                 title: title,
                 description: description
             }
-            $("#post_container").append(postCardTemplate(data))
+            $("#post_container").append(postTemplate(data))
             $(".error-msg").css("display", "none")
             $("#post_modal").modal('hide')
         }
@@ -103,14 +103,18 @@ $(document).ready(function () {
         }
     })
 
+    // Hard delete comment
+    $("#post_container").on("click", ".comment", function() {
+        this.remove()
+    })
+
     // Restore posts
     $("#trash_container").on("click", ".restore-btn", function() {
         var id = parseInt(this.id);
-        console.log(id)
         $("#trash"+id).remove();
         for(var i = 0; i < postList.length; i++) {
             if (id === postList[i].id) {
-                $("#post_container").append(postCardTemplate(postList[i]))
+                $("#post_container").append(postTemplate(postList[i]))
             }
         }
     })
@@ -119,13 +123,14 @@ $(document).ready(function () {
     $("#post_container").on("keypress", ".comment-field", function(e) {
         var id = parseInt(this.id)
         if(e.which == 13) {
+            commentsList.push(new Comments(id, this.value))
             $("#comment_list"+id).append(commentTemplate(this.value))
-            this.value = ''
+            this.value = '';
         }
     })
 
     // Template for posts-card {
-    function postCardTemplate(post) {
+    function postTemplate(post) {
         return `
             <div class="col-8" id=post`+ post.id +`>
                 <div class="card card-container">
@@ -199,6 +204,7 @@ $(document).ready(function () {
         return `
             <div class="comment">
                 <p>`+ data +`</p>
+                <img src="icons/delete.svg">
             </div>
         `
     }
