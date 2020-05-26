@@ -29,22 +29,28 @@ $(document).ready(function () {
     $("#create_post").on("click", function() {
         var title = $("#post_title").val()
         var description = $("#post_description").val()
-        id++;
-        var comments = [];
-        postList.push(new Post(id, title, description, comments))
-        var data = {
-            id: id,
-            title: title,
-            description: description
+        if (title === '') {
+            $(".error-msg").css("display", "block")
+        } else {
+            id++;
+            var comments = [];
+            postList.push(new Post(id, title, description, comments))
+            var data = {
+                id: id,
+                title: title,
+                description: description
+            }
+            $("#post_container").append(postCardTemplate(data))
+            $(".error-msg").css("display", "none")
+            $("#post_modal").modal('hide')
         }
-        $("#post_container").append(postCardTemplate(data))
-        $("#post_modal").modal('hide')
     })
 
     // Empty inputfields on modal close
     $('#post_modal').on('hidden.bs.modal', function (e) {
         $("#post_title").val('')
         $("#post_description").val('')
+        $(".error-msg").css("display", "none")
     })
 
     // Destroy post

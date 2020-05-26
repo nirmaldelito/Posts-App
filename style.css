@@ -90,6 +90,13 @@ body {
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link{
     background-color: #1da1f2
 }
+.error-msg {
+    margin-bottom: 4px;
+    text-align: left;
+    font-size: 14px;
+    color: red;
+    display: none;
+}
 
 /* Model box styles */
 .modal-body {
