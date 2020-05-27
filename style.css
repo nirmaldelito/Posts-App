@@ -90,6 +90,7 @@ body {
 .comments-container .comment img {
     width: 16px;
     cursor: pointer;
+    margin-right: 6px;
 }
 .comments-container .comment p {
     margin: 0;
@@ -100,7 +101,7 @@ body {
     border-radius: 24px;
     color: #ffffff;
     font-weight: bold;
-    margin-right: 2px;
+    margin-right: 6px;
     font-size: 10px;
     background-color: #1da1f2;
     cursor: pointer;
@@ -138,6 +139,20 @@ body {
     padding: 8px 14px;
     border-radius: 8px;
     margin-bottom: 8px;
+}
+.opn-btn {
+    background-color: #1da1f2;
+    border: 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+.opn-btn:hover {
+    background-color: rgb(26, 145, 218);
+}
+.cls-btn {
+    border: 0;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* Trash element styles */
