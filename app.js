@@ -102,7 +102,6 @@ $(document).ready(function () {
     // Edit post
     $("#post_container").on("click",".edit-post", function() {
         var id = this.id;
-        console.log(id)
         var newTitle = $("#titlefield"+id).val()
         var newDescritption = $("#descriptionfield"+id).val()
         if (newTitle === '') {
@@ -112,6 +111,22 @@ $(document).ready(function () {
             $("#description"+id).html(newDescritption)
             $("#edit"+id).modal("hide")
             $(".err-msg").css("display", "none")
+        }
+    })
+
+    // Edit comments
+    $("#post_container").on("click", ".save-comment", function() {
+        var id = parseInt(this.id);
+        console.log(id)
+        // $("#comment_edit_field"+id).attr("value", )
+        var newComment = $("#comment_edit_field"+id).val();
+        $("#display_comment"+id).html(newComment);
+        for (var i =0 ;i < commentsList.length; i++) {
+            if (id === commentsList[i].commentId) {
+                commentsList[i].comment = newComment;
+                $(".comment-edit-field").val('');
+                $("#edit_comment"+id).modal("hide");
+            }
         }
     })
 
@@ -201,7 +216,7 @@ $(document).ready(function () {
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                     </button>
@@ -212,8 +227,8 @@ $(document).ready(function () {
                                     <input id="descriptionfield`+ post.id +`" type="text" placeholder="Title" value="`+ post.description +`">
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary edit-post" id=`+ post.id +`>Save</button>
+                                    <button type="button" class="btn btn-secondary cls-btn" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary edit-post opn-btn" id=`+ post.id +`>Save</button>
                                 </div>
                                 </div>
                             </div>
@@ -258,10 +273,33 @@ $(document).ready(function () {
     function commentTemplate(data) {
         return `
             <div class="comment" id=comment`+ data.commentId +`>
-                <p>`+ data.comment +`</p>
+                <div>
+                    <p id =display_comment`+ data.commentId +`>`+ data.comment +`</p>
+                </div>
                 <div class="comment-actions">
                     <button class="destroy-comment" id=`+ data.commentId +`>Destroy</button>
+                    <img class="comment-edit-icon" id=`+ data.commentId +` src="icons/edit.svg" data-toggle="modal" data-target="#edit_comment`+ data.commentId +`">
                     <img class="delete-icon" id=`+ data.commentId +` src="icons/delete.svg">
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="edit_comment`+ data.commentId +`" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input class="comment-edit-field" id=comment_edit_field`+ data.commentId +` type="text" placeholder="Comment" value="`+ data.comment +`">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary cls-btn" data-dismiss="modal">Close</button>
+                            <button id=`+ data.commentId +`  type="button" class="btn btn-primary save-comment opn-btn">Save</button>
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `
